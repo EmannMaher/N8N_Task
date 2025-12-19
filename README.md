@@ -1,35 +1,57 @@
-# AI Agent Engineer: Resilient ETL & BI Pipeline
+# AI Agent Engineer Technical Assessment: Resilient ETL & BI Pipeline
 
-> **More than just an ETL pipeline—this is a resilient BI solution.** I engineered an n8n workflow that goes beyond simple data movement. By leveraging custom JavaScript for deep data sanitization and deduplication, I ensured that only high-quality records reach the destination. The architecture concludes with a sophisticated reporting layer, delivering visual insights directly to stakeholders' inboxes while maintaining a robust, error-tolerant core.
+### 🔗 Project Links
+* **Demo Video:** [PASTE_YOUR_LINK_HERE (Loom/YouTube/Drive)]
+* **Workflow URL:** https://drive.google.com/file/d/1gJRWApz_knRhelX5P0vcwamKrMMuUjFH/view?usp=drive_link
+---
+
+### 📝 Project Overview & Approach
+I engineered a production-grade ETL pipeline that transforms raw API data into high-integrity records and visual business intelligence. My approach used a centralized **JavaScript Transformation Engine** to process data in a single $O(n)$ pass. I designed a hybrid data architecture that allows a single workflow to power two different streams: row-level synchronization for Google Sheets and aggregate-level reporting for executive dashboards.
 
 ---
 
-### 📊 Project Summary
-This project demonstrates a production-grade ETL (Extract, Transform, Load) workflow designed with scalability and resilience in mind. Beyond the core requirements of fetching and storing data, I engineered a **Business Intelligence layer** that performs real-time data aggregation and visual reporting. The system is built on **defensive programming principles**, ensuring that API failures are captured and handled through an error-handling configuration, preventing workflow stagnation and maintaining system observability.
+### 🛠️ Challenges & Solutions
 
-#### **Technical Implementation & Data Logic**
-At the heart of the workflow is a centralized **JavaScript Transformation Engine** within a custom Code node. By consolidating the logic into a single execution pass ($O(n)$ complexity), I optimized performance and maintainability. This engine handles:
-* **Data Sanitization:** Normalizing naming conventions and validating email structures.
-* **Integrity Filtering:** Implementing a "seen" hash map to ensure 100% data deduplication and enforcing strict domain-specific filters.
-* **Schema Enhancement:** Injecting high-resolution timestamps (`processed_at`) and metadata for auditability.
+* **Challenge 1: The "User vs. Stats" Data Structure.** I needed to send a list of users to Google Sheets while simultaneously providing summary statistics to the QuickChart nodes.
+* **Solution:** I architected the **Code Node** to return a dual-layered JSON object containing both a `users` array and a `stats` object. This allows the workflow to use a **Split Out** node for row-based updates while the main branch feeds the reporting engine.
 
-#### **Advanced Reporting (Bonus Features)**
-To provide strategic value, I extended the core requirements by building an **Automated Reporting system**. The transformation logic calculates real-time distribution metrics—including Age groups, Gender splits, and Top Cities—alongside a calculated success rate for the batch.
-* **Visual Intelligence:** The workflow utilizes the **built-in QuickChart nodes** to generate high-fidelity charts dynamically, including bar, doughnut, and city-based distribution charts.
-* **Multi-Channel Delivery:** Cleaned records are synchronized to **Google Sheets** via a Split Out node for operational use, while a **Refined HTML Email** is dispatched via Gmail to stakeholders.
+* **Challenge 2: Active Error Governance.** I needed a system that proactively manages failures rather than silently ignoring them.
+* **Solution:** I implemented a dedicated **Error Workflow**. By connecting the main task to a specialized error-trigger handler, the system intercepts failures (like API timeouts), logs the incident, and ensures the pipeline remains observable and robust.
 
-#### **Architectural Resilience**
-A key challenge was maintaining a "flat" structure for spreadsheet compatibility while preserving "nested" objects for the reporting engine. I solved this by architecting a hybrid JSON return from the Code node, allowing downstream nodes to target specific data layers—like the `users` array for Google Sheets and the `stats` object for reporting—efficiently. By implementing defensive logic and "Continue on Fail" settings, the pipeline remains robust against external API instability, showcasing a professional-tier approach to automated data engineering.
+* **Challenge 3: Complex Visual Merging.** Standard nodes struggle to handle multiple separate image streams for a single email.
+* **Solution:** I generated four distinct charts for Age, Gender, Role, and City. I then utilized **sequential Merge nodes** to consolidate these separate binary files into a single context for a unified visual report.
 
 ---
 
-### 🛠️ Tech Stack
-* **Platform:** n8n
-* **Language:** JavaScript (ES6+)
-* **Integrations:** DummyJSON, Google Sheets, Gmail
-* **Native n8n Features:** QuickChart Node, Code Node, Split Out, Merge
+### 🌟 Bonus Features: Aggregation & Reporting
+I implemented **Aggregation/Reporting** because raw data lacks immediate business value without visualization.
+* **Advanced Aggregation:** The custom Code node calculates live distributions for Age, Gender, and Role, alongside batch success rates.
+* **Native Visualization:** The workflow utilizes four built-in **QuickChart** nodes to generate high-fidelity visuals, bridging the gap between raw logs and executive summary reports.
 
-### 🚀 How to Run
-1. **Import:** Download the `Task.json` file from this repo and import it into your n8n instance.
-2. **Credentials:** Connect your Google Sheets and Gmail accounts.
-3. **Trigger:** Execute the workflow manually or via the Webhook URL to initiate the ETL and reporting process.
+---
+
+### 📸 Project Gallery
+*All technical screenshots and sample outputs are located in the `/screenshots` folder.*
+
+#### **1. Full System Architecture**
+![Full Workflow](./screenshots/Screenshot%202025-12-19%20170246.png)
+
+#### **2. Custom JavaScript Logic (Users vs. Stats)**
+![Code Node Logic](./screenshots/Screenshot%202025-12-19%20170425.png)
+
+#### **3. Sample Output: Executive BI Report**
+![Email Output](./screenshots/Screenshot%202025-12-19%20170655.png)
+
+---
+
+### 🚀 Instructions to Test/Run
+1. **Import:** Download and import the `Task.json` file into n8n.
+2. **Setup:** Connect your **Google Sheets** and **Gmail** OAuth2 credentials.
+3. **Trigger:** Execute the **Webhook** or click **Execute Workflow**.
+4. **Observe:** Check the Google Sheet for cleaned records and your Inbox for the merged visual infographic.
+
+---
+
+### 📂 Repository Contents
+* **`Task.json`**: The complete n8n workflow export.
+* **`/screenshots`**: A dedicated folder containing all workflow visualizations, logic captures, and sample data outputs.
