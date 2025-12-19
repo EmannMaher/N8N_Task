@@ -1,0 +1,76 @@
+{
+  "name": "Error Handler",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c15c9744-b88d-4615-9ad9-c4981355025e",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://webhook.site/a45a247e-d71d-4821-b150-d77f39912085",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "error_message",
+              "value": "={{ $json.execution.error.message }}"
+            },
+            {
+              "name": "node_name",
+              "value": "={{ $json.execution.lastNodeExecuted }}"
+            },
+            {
+              "name": "workflow_name",
+              "value": "={{ $json.workflow.name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "ca81767c-384a-4c72-9e4c-6c87cb2e77e1",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "pbr9iI5FvnrzJg0h"
+  },
+  "versionId": "f059e509-7760-47c9-a569-6cc26c84fe22",
+  "meta": {
+    "instanceId": "a19e94959bce871673cb415277d5388583325548423614af043e3fcbc0fc346a"
+  },
+  "id": "pbr9iI5FvnrzJg0h",
+  "tags": []
+}
