@@ -1,7 +1,8 @@
 # AI Agent Engineer Technical Assessment
 
 ### 🔗 Project Links
-* **Demo Video:** 
+* **Demo Video:**
+* **N8N Workflow:** https://emanmaher.app.n8n.cloud/workflow/CdLDnRz0KURNWXHj
 ---
 
 ### 📝 Project Overview & Approach
