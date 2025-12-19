@@ -1,8 +1,7 @@
 # AI Agent Engineer Technical Assessment: Resilient ETL & BI Pipeline
 
 ### 🔗 Project Links
-* **Demo Video:** [PASTE_YOUR_LINK_HERE (Loom/YouTube/Drive)]
-* **Workflow URL:** https://drive.google.com/file/d/1gJRWApz_knRhelX5P0vcwamKrMMuUjFH/view?usp=drive_link
+* **Demo Video:** 
 ---
 
 ### 📝 Project Overview & Approach
