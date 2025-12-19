@@ -1,4 +1,4 @@
-# AI Agent Engineer Technical Assessment: Resilient ETL & BI Pipeline
+# AI Agent Engineer Technical Assessment
 
 ### 🔗 Project Links
 * **Demo Video:** 
