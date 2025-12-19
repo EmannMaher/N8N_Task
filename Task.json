@@ -1,0 +1,450 @@
+{
+  "name": "Task",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://dummyjson.com/users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        48,
+        96
+      ],
+      "id": "3ffe862d-9478-48d9-882e-fd12339f1bf6",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "path": "f919c7cb-def1-46af-9284-db3cc27b89b0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -192,
+        96
+      ],
+      "id": "6813bb81-e5c2-4ef7-bf17-348748519a60",
+      "name": "Webhook",
+      "webhookId": "f919c7cb-def1-46af-9284-db3cc27b89b0"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1AFiejvOy_LSuuPgTH7hzaLIkhBl8q_5VjhsT3rPr1Uc",
+          "mode": "list",
+          "cachedResultName": "Task",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AFiejvOy_LSuuPgTH7hzaLIkhBl8q_5VjhsT3rPr1Uc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AFiejvOy_LSuuPgTH7hzaLIkhBl8q_5VjhsT3rPr1Uc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $json.full_name }}",
+            "Email": "={{ $json.email }}",
+            "Phone": "={{ $json.phone }}",
+            "Company": "={{ $json.company_name }}",
+            "Processing Time": "={{ $json.processed_at }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Processing Time",
+              "displayName": "Processing Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        992,
+        -16
+      ],
+      "id": "ef6f92ec-9772-47b3-8749-f3e0d11564ca",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "APJ6JFcGmBB1DcHK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "eman.maher.zakarya@gmail.com",
+        "subject": "Users Report ",
+        "emailType": "text",
+        "message": "=Hello,\n\nPlease find attached the latest users report. The attachments include four charts illustrating key insights from the data:\n\n1. Users by Age\n2. Users by Gender\n3. Users by Role\n4. Top 10 Cities\n\nSummary of the data:\n- Total Users: {{ $('Code').item.json.stats.totalUsers }}\n- Processed Users: {{ $('Code').item.json.stats.processedUsers }}\n- Success Rate: {{ $('Code').item.json.stats.successRate }}%\n- Top Email Domains: {{ $('Code').item.json.stats.topDomains.join(\", \") }}\n\nReport generated on: {{ new Date().toLocaleString() }}\n\nBest Regards,\nEman Maher",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "data1"
+              },
+              {
+                "property": "data2"
+              },
+              {
+                "property": "data3"
+              },
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1088,
+        224
+      ],
+      "id": "5bd59cee-7890-4c1f-99c1-cc9d7f22b0dd",
+      "name": "Send a message",
+      "webhookId": "8eab092b-4414-4ece-ac32-f32d270d06a5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ITdxTpZHyjTZNP37",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "labelsUi": {
+          "labelsValues": [
+            {
+              "label": "={{ $json.stats.ageLabels }}"
+            }
+          ]
+        },
+        "data": "={{ $json.stats.ageValues }}",
+        "output": "data1",
+        "chartOptions": {
+          "backgroundColor": "#01010100"
+        },
+        "datasetOptions": {}
+      },
+      "type": "n8n-nodes-base.quickChart",
+      "typeVersion": 1,
+      "position": [
+        656,
+        112
+      ],
+      "id": "c549bcf6-b74e-47f9-a45a-752a17179ec3",
+      "name": "QuickChart"
+    },
+    {
+      "parameters": {
+        "chartType": "doughnut",
+        "labelsUi": {
+          "labelsValues": [
+            {
+              "label": "={{ $json.stats.genderLabels }}"
+            }
+          ]
+        },
+        "data": "={{ $json.stats.genderValues }}",
+        "output": "data3",
+        "chartOptions": {},
+        "datasetOptions": {}
+      },
+      "type": "n8n-nodes-base.quickChart",
+      "typeVersion": 1,
+      "position": [
+        656,
+        352
+      ],
+      "id": "5385475c-a2c6-462c-a619-14f4e61f892f",
+      "name": "QuickChart1"
+    },
+    {
+      "parameters": {
+        "labelsUi": {
+          "labelsValues": [
+            {
+              "label": "={{ $json.stats.cityLabels }}"
+            }
+          ]
+        },
+        "data": "={{ $json.stats.cityValues }}",
+        "output": "data2",
+        "chartOptions": {},
+        "datasetOptions": {}
+      },
+      "type": "n8n-nodes-base.quickChart",
+      "typeVersion": 1,
+      "position": [
+        656,
+        224
+      ],
+      "id": "9906e046-a808-4416-b0ab-1dcca44f3967",
+      "name": "QuickChart2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 4,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        896,
+        192
+      ],
+      "id": "bf24b183-a30b-424d-8981-7f14e024b936",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const users = $input.first().json.users;\n\nconst cleanUsers = [];\nconst seenEmails = {};\n\nconst totalUsers = users.length;\nlet processedUsers = 0;\n\nlet age18_29 = 0, age30_39 = 0, age40_plus = 0;\nlet maleCount = 0, femaleCount = 0;\nconst domainCount = {};\nconst cityCount = {};\nconst roleCount = {};\n\nfor (let i = 0; i < users.length; i++) {\n  const user = users[i];\n  const email = (user.email || \"\").toLowerCase();\n\n  // Filter invalid emails\n  if (!email.includes(\"@\") || !email.endsWith(\".com\")) continue;\n\n  // Skip duplicates\n  if (seenEmails[email]) continue;\n  seenEmails[email] = true;\n\n  processedUsers++;\n\n  cleanUsers.push({\n    json: {\n      full_name: user.firstName + \" \" + user.lastName,\n      email: email,\n      phone: \"'\" + (user.phone || \"\"),\n      company_name: (user.company && user.company.name) ? user.company.name : \"Un Known\",\n      processed_at: new Date()\n    }\n  });\n\n  // Domains\n  const domain = email.split(\"@\")[1];\n  domainCount[domain] = (domainCount[domain] || 0) + 1;\n\n  // Age Dirstibution\n  if (user.age >= 18 && user.age <= 29) age18_29++;\n  else if (user.age >= 30 && user.age <= 39) age30_39++;\n  else if (user.age >= 40) age40_plus++;\n\n  // Gender\n  if (user.gender === \"male\") maleCount++;\n  if (user.gender === \"female\") femaleCount++;\n\n  // City\n  const city = (user.address && user.address.city) ? user.address.city : \"Unknown\";\n  cityCount[city] = (cityCount[city] || 0) + 1;\n\n  // Role\n  const role = user.role || \"Unknown\";\n  roleCount[role] = (roleCount[role] || 0) + 1;\n}\n\nconst ageLabels = [\"18-29\",\"30-39\",\"40+\"];\nconst ageValues = [age18_29, age30_39, age40_plus];\n\nconst genderLabels = [\"male\",\"female\"];\nconst genderValues = [maleCount, femaleCount];\n\nconst topDomains = [];\nconst topDomainCounts = [];\nlet count = 0;\nfor (let d in domainCount) {\n  if (count >= 3) break;\n  topDomains.push(d);\n  topDomainCounts.push(domainCount[d]);\n  count++;\n}\n\nconst cityLabels = [];\nconst cityValues = [];\ncount = 0;\nfor (let c in cityCount) {\n  if (count >= 10) break;\n  cityLabels.push(c);\n  cityValues.push(cityCount[c]);\n  count++;\n}\n\nconst roleLabels = [];\nconst roleValues = [];\nfor (let r in roleCount) {\n  roleLabels.push(r);\n  roleValues.push(roleCount[r]);\n}\n\nconst successRate = (processedUsers / totalUsers) * 100;\n\nreturn[\n  {\n    json: {\n      stats: {\n        totalUsers,\n        processedUsers,\n        successRate,\n        ageLabels,\n        ageValues,\n        genderLabels,\n        genderValues,\n        cityLabels,\n        cityValues,\n        roleLabels,\n        roleValues,\n        topDomains\n      },\n      users: cleanUsers.map(u => u.json)\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        96
+      ],
+      "id": "9b33a5e5-acb5-48d4-996f-efe6922c41b0",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        656,
+        -16
+      ],
+      "id": "da86b73b-ccaa-4f33-8e85-9b1706e3954f",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "labelsUi": {
+          "labelsValues": [
+            {
+              "label": "={{ $json.stats.roleLabels }}"
+            }
+          ]
+        },
+        "data": "={{ $json.stats.roleValues }}",
+        "chartOptions": {},
+        "datasetOptions": {}
+      },
+      "type": "n8n-nodes-base.quickChart",
+      "typeVersion": 1,
+      "position": [
+        656,
+        496
+      ],
+      "id": "193ee8be-b13e-4531-9030-19a69104462e",
+      "name": "QuickChart3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "QuickChart": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QuickChart2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "QuickChart1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "QuickChart",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "QuickChart2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "QuickChart1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "QuickChart3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QuickChart3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "pbr9iI5FvnrzJg0h"
+  },
+  "versionId": "633bd718-e232-4650-b7c1-33949b63f467",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a19e94959bce871673cb415277d5388583325548423614af043e3fcbc0fc346a"
+  },
+  "id": "CdLDnRz0KURNWXHj",
+  "tags": []
+}
